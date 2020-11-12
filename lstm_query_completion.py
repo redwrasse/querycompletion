@@ -23,7 +23,7 @@ def prepare_war_and_peace():
     return text
 
 
-class SimpleLSTMQueryCompletion:
+class NextCharLSTM:
 
     def __init__(self, n):
         self.text = prepare_war_and_peace()
@@ -34,7 +34,7 @@ class SimpleLSTMQueryCompletion:
         filepath = f"weights.bestn={self.n}.hdf5"
         try:
             model = keras.models.load_model(filepath)
-            print('loaded model from checkpoint')
+            print(f'loaded LSTM model for n={self.n} from checkpoint')
 
         except:
             model = self.__build_model()
@@ -57,15 +57,18 @@ class SimpleLSTMQueryCompletion:
         if len(sentence) > self.n:
             j = random.randint(0, len(sentence) - self.n)
             query = sentence[j:j + self.n]
-            print(f'sample query: {query}')
-            x_pred = np.zeros((1, self.n, 256))
-            for t, qc in enumerate(query):
-                if ord(qc) < 256:
-                    x_pred[0, t, ord(qc)] = 1
-            model = self.model
-            dist = model.predict(x_pred, verbose=0)[0]
+            dist = self.next_char_dist(query)
             nextchar = chr(np.argmax(dist))
-            print(f'predicted nextchar: {nextchar}')
+            return nextchar
+
+    def next_char_dist(self, query):
+        x_pred = np.zeros((1, self.n, 256))
+        for t, qc in enumerate(query):
+            if ord(qc) < 256:
+                x_pred[0, t, ord(qc)] = 1
+        model = self.model
+        dist = model.predict(x_pred, verbose=0)[0]
+        return dist
 
     def train(self, nepochs):
         filepath = f"weights.bestn={self.n}.hdf5"
@@ -97,12 +100,70 @@ class SimpleLSTMQueryCompletion:
             loss = history.history['loss'][0]
             val_loss = history.history['val_loss'][0]
             print(f'epoch loss: {loss} epoch val loss: {val_loss}')
-            self.sample_next_char_pred()
+
+
+def query_completions(models, query, completion_length, prob_cutoff=1e-2):
+    # completion_length is total length of added characters to query
+    n_values = sorted([m.n for m in models])
+    m = len(query)
+    # need lstms from n = m to n = completion_length + m
+    for i in range(m, completion_length + m):
+        if i not in n_values:
+            print(f'missing lstm for n = {i} to perform desired completion')
+            return
+
+    completion_probs = {query: 1.0}
+    for k in range(m, completion_length + m):
+        model = [mdl for mdl in models if mdl.n == k][0]
+        keys = list(completion_probs)
+        for cpl in keys:
+            dist = model.next_char_dist(cpl)
+            for ix in dist.argsort()[::-1]:
+                if completion_probs[cpl] * dist[ix] > prob_cutoff:
+                    c = chr(ix)
+                    next_cpl = cpl + c
+                    completion_probs[next_cpl] = completion_probs[cpl] * dist[ix]
+            del completion_probs[cpl]
+        #print(completion_probs)
+    return completion_probs
+
+
+def load_models():
+    import os
+    print("loading models ...")
+    models = []
+    fnames = os.listdir('./')
+    for fname in fnames:
+        if fname.endswith('.hdf5'):
+            n = int(fname.split('.hdf5')[0].split("=")[-1])
+            models.append(NextCharLSTM(n))
+    print("-"*50)
+    return models
+
+
+def train_n(n):
+    lstm = NextCharLSTM(n)
+    lstm.train(nepochs=100)
 
 
 def main():
-    sqc = SimpleLSTMQueryCompletion(n=3)
-    sqc.train(nepochs=100)
+    import sys
+    models = load_models()
+    while True:
+        query = input('Please enter a query (q to quit):\n')
+        if query == 'q':
+            print('Exiting program.')
+            sys.exit(0)
+        completions = query_completions(models, query, 3)
+        if completions is None:
+            continue
+        print_completions(query, completions)
+
+
+def print_completions(query, completions):
+    print(f"completions for '{query}':")
+    for cpl, prob in sorted(completions.items(), key=lambda e: -e[1]):
+        print(f'\t{cpl} ({prob*100:.2f}%)')
 
 
 if __name__ == '__main__':
