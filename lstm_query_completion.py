@@ -7,12 +7,7 @@ from tensorflow.keras.layers import Dense
 from tensorflow.keras.callbacks import ModelCheckpoint
 
 
-WAR_AND_PEACE = '../war_and_peace.txt'
-MOCK_TEXT = ['This is a cat.'] * 1000 + ['This is a dog.'] * 1000
-
-
-def prepare_mock_text():
-    return MOCK_TEXT
+WAR_AND_PEACE = './warandpeace.txt'
 
 
 def prepare_war_and_peace():
@@ -34,14 +29,15 @@ class LSTMAutocomplete:
         self.null_char = '0'
         self.lstm_dim = lstm_dim
         self.text = self.prepare_data()
-        self.model = self.get_model()
         self.maxlen = max(len(s) for s in self.text)
+        print(f'maxlen: {self.maxlen}')
+        self.model = self.get_model()
 
     def build_model(self):
         maxlen = max(len(s) for s in self.text)
         model = keras.Sequential([
             keras.Input(shape=(maxlen - 1, 256)),
-            LSTM(self.lstm_dim),#LSTM(128),
+            LSTM(self.lstm_dim),
             Dense(256, activation='softmax'),
         ])
         optimizer = keras.optimizers.RMSprop(learning_rate=0.01)
@@ -123,47 +119,52 @@ class LSTMAutocomplete:
         model = self.get_model()
         filepath = "weights.best.hdf5"
         checkpoint = ModelCheckpoint(filepath=filepath,
-                                     verbose=1,  mode='max')
+                                     verbose=0,  mode='max')
         callbacks_list = [checkpoint]
         maxlen = max(len(s) for s in self.text)
         n_epochs = 50
-        batch_size = 128
-        for epoch in range(n_epochs):
-            print(f'epoch: {epoch}')
-            x = np.zeros((len(self.text), maxlen - 1, 256), dtype=np.bool)
-            y = np.zeros((len(self.text), 256), dtype=np.bool)
-            for i, sentence in enumerate(self.text):
-                # randomly sampled sentence subset as 'query'
-                if len(sentence) < 2:
-                    continue
-                min_query_length = min(5, len(sentence)-1)
-                k = random.randint(min_query_length, len(sentence) - 1)
-                l = random.randint(0, len(sentence) - k - 1)
-                query = sentence[l:l+k]
-                nextchar = sentence[l+k]
-                for t in range(maxlen - 1):
-                    if t < k:
-                        char = query[t]
-                    else:
-                        char = self.null_char
-                    o = ord(char)
-                    if o < 256:
-                        x[i, t, o] = 1
-                if ord(nextchar) < 256:
-                    y[i, ord(nextchar)] = 1
-            model.fit(x, y, batch_size=batch_size, epochs=1,
-                      #validation_split=0.33,
-                      callbacks=callbacks_list, verbose=1)
+        batch_size = 1200
+        #for epoch in range(n_epochs):
 
-    def prepare_data(self):
-        return prepare_mock_text()
-        #return prepare_war_and_peace()
+        x = np.zeros((len(self.text), maxlen - 1, 256), dtype=np.bool)
+        y = np.zeros((len(self.text), 256), dtype=np.bool)
+        for i, sentence in enumerate(self.text):
+            # randomly sampled sentence subset as 'query'
+            if len(sentence) < 2:
+                continue
+            min_query_length = min(5, len(sentence)-1)
+            k = random.randint(min_query_length, len(sentence) - 1)
+            l = random.randint(0, len(sentence) - k - 1)
+            query = sentence[l:l+k]
+            nextchar = sentence[l+k]
+            for t in range(maxlen - 1):
+                if t < k:
+                    char = query[t]
+                else:
+                    char = self.null_char
+                o = ord(char)
+                if o < 256:
+                    x[i, t, o] = 1
+            if ord(nextchar) < 256:
+                y[i, ord(nextchar)] = 1
+        history = model.fit(x, y, batch_size=batch_size, epochs=n_epochs,
+                  validation_split=0.33,
+                  callbacks=callbacks_list, verbose=1)
+        loss = history.history['loss'][0]
+        val_loss = history.history['val_loss'][0]
+
+        print(f'epoch loss: {loss} epoch val loss: {val_loss}')
+
+
+    @staticmethod
+    def prepare_data():
+        return prepare_war_and_peace()
 
 
 def main():
-    lstm_ac = LSTMAutocomplete()
+    lstm_ac = LSTMAutocomplete(lstm_dim=128)
     lstm_ac.train()
-    query = 'This is '
+    query = 'it'
     lstm_ac.predict_next_char(query)
     completions = lstm_ac.ranked_query_completion(query)
     print(completions)
