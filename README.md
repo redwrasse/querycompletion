@@ -14,5 +14,5 @@ start command line prompt
 ``` 
 python3 lstm_query_completion.py
 ```
-
+----
 ![query completion](./resources/querycompl.png)
