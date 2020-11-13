@@ -4,7 +4,7 @@ query completion
 Query completion from a collection of next-character LSTM models.
 
 ### Background
-Ref http://localhost:4000/supplementals/querycompletion.html
+Ref www.redwrasse.io/supplementals/querycompletion
 
 Query completion can be factored into a product of next-character models
 
