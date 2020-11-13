@@ -1,6 +1,8 @@
 query completion
 ---
 
+The basic point is predicting several characters ahead is quite a bit more complicated than predicting one character ahead.
+
 Query completion from a collection of next-character LSTM models. Weights for some pre-trained models for n = ... are included.
 You will need a contiguous sequence of n= models trained to perform query completion.
 
