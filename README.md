@@ -5,8 +5,13 @@ Query completion from a collection of next-character LSTM models. Weights for so
 You will need a contiguous sequence of n= models trained to perform query completion.
 
 ### Background
-See www.redwrasse.io/supplementals/querycompletion 
 Query completion can be factored into a product of next-character models.
+
+See www.redwrasse.io/supplementals/querycompletion for details.
+
+Additionally, query completion is a larger topic, 
+see for example https://sigir-ecom.github.io/ecom18Papers/paper24.pdf
+
 
 
 ### Run
