@@ -1,10 +1,12 @@
 query completion
 ---
-
-Predicting several characters ahead is quite a bit more complicated than predicting one character ahead.
 Query completion can be factored into a product of next-character models. In this case a collection of next-character LSTM models. 
 
 Mathematically the query completion probability is the product of next-character probabilities. See references.
+
+For example,
+
+P(nge|ora) = P(e|orang) P(g|oran) P(n|ora)
 
 Weights for some pre-trained models for n = ... are included.
 You will need a contiguous sequence of trained n= models trained to perform query completion.
