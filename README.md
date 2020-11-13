@@ -21,5 +21,5 @@ python3 lstm_query_completion.py
 
 
 ### References
-* www.redwrasse.io/supplementals/querycompletion
+* [Internal Notes](www.redwrasse.io/supplementals/querycompletion)
 * [Realtime query completion via deep language models](https://sigir-ecom.github.io/ecom18Papers/paper24.pdf)
