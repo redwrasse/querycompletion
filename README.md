@@ -10,8 +10,9 @@ You will need a contiguous sequence of trained n= models trained to perform quer
 ### Run
 
 start command line prompt
+
 ``` 
-python3 lstm_query_completion.py
+python3 cmd_line.py
 ```
 ----
 
