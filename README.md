@@ -4,7 +4,7 @@ Query completion can be factored into a product of next-character models. In thi
 
 Mathematically the query completion probability is the product of next-character probabilities. See references.
 
-For example,
+For example, completing ‘ora’ with ‘nge’ to make ‘orange’
 
 P(nge|ora) = P(e|orang) P(g|oran) P(n|ora)
 
