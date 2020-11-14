@@ -112,6 +112,7 @@ def query_completions(models, query, completion_length, prob_cutoff=1e-2):
             print(f'missing lstm for n = {i} to perform desired completion')
             return
 
+    lstm_probs = {}
     completion_probs = {query: 1.0}
     for k in range(m, completion_length + m):
         model = [mdl for mdl in models if mdl.n == k][0]
@@ -120,12 +121,15 @@ def query_completions(models, query, completion_length, prob_cutoff=1e-2):
             dist = model.next_char_dist(cpl)
             for ix in dist.argsort()[::-1]:
                 if completion_probs[cpl] * dist[ix] > prob_cutoff:
+                    if cpl not in lstm_probs:
+                        lstm_probs[cpl] = []
                     c = chr(ix)
                     next_cpl = cpl + c
                     completion_probs[next_cpl] = completion_probs[cpl] * dist[ix]
+                    lstm_probs[next_cpl] = lstm_probs[cpl] + [(c, cpl, dist[ix])]
             del completion_probs[cpl]
         #print(completion_probs)
-    return completion_probs
+    return completion_probs, lstm_probs
 
 
 def load_models():

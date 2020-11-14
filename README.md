@@ -18,7 +18,7 @@ python3 cmd_line.py
 
 ### Screenshot
 
-![query completion](./resources/querycompl.png)
+![query completion](./resources/cmdline.png)
 
 
 ### References
