@@ -27,5 +27,5 @@ python3 cmd_line.py
 
 
 ### References
-* [Internal Notes](www.redwrasse.io/supplementals/querycompletion)
+* [Internal Notes](https://www.redwrasse.io/supplementals/querycompletion)
 * [Realtime query completion via deep language models](https://sigir-ecom.github.io/ecom18Papers/paper24.pdf)
