@@ -6,7 +6,7 @@ Query completion as a product of next-character models. For example, completing 
 
 P(nge|ora) = P(e|orang) P(g|oran) P(n|ora)
 
-A contiguous sequence of trained n= models is needed; weights for some pre-trained models for n = ... are i ncluded.
+A contiguous sequence of trained n= models is needed; weights for some pre-trained models for n = ... are included.
 
 
 ### Run
