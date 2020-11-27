@@ -1,5 +1,7 @@
 query completion
 ---
+![query completion](./resources/cmdline.png)
+
 Query completion as a product of next-character models. For example, completing ‘ora’ with ‘nge’ to make ‘orange’
 
 P(nge|ora) = P(e|orang) P(g|oran) P(n|ora)
@@ -15,10 +17,6 @@ start command line prompt
 python3 cmd_line.py
 ```
 ----
-
-### Screenshot
-
-![query completion](./resources/cmdline.png)
 
 
 ### References
