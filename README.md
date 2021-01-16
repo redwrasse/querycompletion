@@ -1,15 +1,12 @@
 query completion
 ---
-Query completion can be factored into a product of next-character models. In this case a collection of next-character LSTM models. 
+![query completion](./resources/cmdline.png)
 
-Mathematically the query completion probability is the product of next-character probabilities. See references.
-
-For example, completing ‘ora’ with ‘nge’ to make ‘orange’
+Query completion as a product of next-character models. For example, completing ‘ora’ with ‘nge’ to make ‘orange’
 
 P(nge|ora) = P(e|orang) P(g|oran) P(n|ora)
 
-Weights for some pre-trained models for n = ... are included.
-You will need a contiguous sequence of trained n= models trained to perform query completion.
+A contiguous sequence of trained n= models is needed; weights for some pre-trained models for n = ... are included.
 
 
 ### Run
@@ -21,11 +18,7 @@ python3 cmd_line.py
 ```
 ----
 
-### Screenshot
-
-![query completion](./resources/cmdline.png)
-
 
 ### References
-* [Internal Notes](www.redwrasse.io/supplementals/querycompletion)
+* [Internal Notes](https://www.redwrasse.io/supplementals/querycompletion)
 * [Realtime query completion via deep language models](https://sigir-ecom.github.io/ecom18Papers/paper24.pdf)
