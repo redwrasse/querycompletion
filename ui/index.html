@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Query Completions</title>
+<style type="text/css">
+    html *
+{
+   /*font-size: 1em !important;*/
+   color: #000 !important;
+   font-family: monospace, sans-serif !important;
+}
+    #likelihoods tr {
+        cursor: pointer;
+    }
+    #likelihoods div.bar {
+        height: 1em;
+        background: #80C0FF;
+    }
+    #likelihoods tr.active {
+        font-weight: bold;
+    }
+    #likelihoods tr.active div.bar {
+        background: #60A0FF;
+    }
+     button {
+      transition-duration: 0.4s;
+background-color: white;
+  color: black;
+  border: 2px solid #4CAF50; /* Green */
+      }
+    button:hover {
+         background-color: #4CAF50; /* Green */
+  color: white;
+
+    }
+
+</style>
+
+</head>
+<body>
+
+<div class="vert-main">
+
+    <div class="horz-ma  ">
+
+        <article>
+            <h2>Query Completions</h2>
+            <noscript>
+                <p>This requires JavaScript, which is not supported by your browser or is disabled.</p>
+            </noscript>
+            <label for="prefix">Enter prefix (7 characters or less):</label>
+
+    <input type="text" id="prefix" name="q">
+            <br/>
+            <br/>
+    <button type="button">Get Completions</button>
+             <button type="button">I'm Feeling Lucky</button>
+        </article>
+
+    </div>
+     <p style="width: 500px;">Taken from <a href="../warandpeace.txt">an excerpt</a>
+                of War and Peace.
+                Inspired by <a href="https://sigir-ecom.github.io/ecom18Papers/paper24.pdf">this paper</a>.
+         <br><br>
+         Query completions are formed as a product of next-character completions, by the probability
+         chain rule. For example,
+         <br><br>
+       P(nge|ora) = P(e|orang) P(g|oran) P(n|ora)
+    </p>
+</body>
+</html>
