@@ -42,15 +42,15 @@ function buildTable(labels, objects, container) {
   table.appendChild(thead);
 
   for (j = 0; j < objects.length; j++) {
-    var tbodyTr = document.createElement('tr');
+    var tbodyTr = document.createElement('tr'); // table row
     for (k = 0; k < labels.length; k++) {
-      var tbodyTd = document.createElement('td');
+      var tbodyTd = document.createElement('td'); // row element data
       tbodyTd.innerHTML = objects[j][labels[k].toLowerCase()];
-      tbodyTr.appendChild(tbodyTd);
+      tbodyTr.appendChild(tbodyTd); // append row element data to table row
     }
-    tbody.appendChild(tbodyTr);
+    tbody.appendChild(tbodyTr); // append table row to table body
   }
-  table.appendChild(tbody);
+  table.appendChild(tbody); // append table body to table
 
   container.appendChild(table);
 }

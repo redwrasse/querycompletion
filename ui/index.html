@@ -10,6 +10,24 @@
    color: #000 !important;
    font-family: monospace, sans-serif !important;
 }
+    table {
+        /*font-family: "Helvetica", "Lucida Sans", "Lucida Sans Unicode", "Luxi Sans", Tahoma, sans-serif;*/
+        box-shadow: 1px 1px 5px rgba(0,0,0,0.5);
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
+    table {
+        /*margin: auto;*/
+    }
+    table, td, th {
+        padding: 7px;
+        /*text-align: center;*/
+        border: 1px solid rgb(42, 107, 83);
+    }
+    th {
+        background-color: rgb(99, 156, 140);
+        color: white;
+    }
     #likelihoods tr {
         cursor: pointer;
     }
@@ -49,6 +67,19 @@ background-color: white;
             <noscript>
                 <p>This requires JavaScript, which is not supported by your browser or is disabled.</p>
             </noscript>
+
+            <p style="width: 500px;">Taken from <a href="../warandpeace.txt">an excerpt</a>
+                of War and Peace.
+                Inspired by <a href="https://sigir-ecom.github.io/ecom18Papers/paper24.pdf">this paper</a>.
+                <br><br>
+                Query completions are formed as a product of next-character completions, by the probability
+                chain rule. For example,
+                <br><br>
+                P(nge|ora) = P(e|orang) P(g|oran) P(n|ora)
+            </p>
+            <br/>
+            <br/>
+            <br/>
             <label for="prefix">Enter prefix (7 characters or less):</label>
 
     <input type="text" id="prefix" name="q">
@@ -59,22 +90,17 @@ background-color: white;
 
             <div id="results">
                 <br/>
-                 <script src="sample.js"></script>
+                <br/>
+                <br/>
+                <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+<!--                 <script src="sample.js"></script>-->
+                 <script src="sample2.js"></script>
             </div>
 
         </article>
 
     </div>
 
-     <p style="width: 500px;">Taken from <a href="../warandpeace.txt">an excerpt</a>
-                of War and Peace.
-                Inspired by <a href="https://sigir-ecom.github.io/ecom18Papers/paper24.pdf">this paper</a>.
-         <br><br>
-         Query completions are formed as a product of next-character completions, by the probability
-         chain rule. For example,
-         <br><br>
-       P(nge|ora) = P(e|orang) P(g|oran) P(n|ora)
-    </p>
 </div>
 </body>
 </html>
