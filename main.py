@@ -1,13 +1,11 @@
-# server.py
+# main.py
 from flask import Flask, render_template
-from flask_cors import CORS
 import json
 
 from lstm_query_completion import load_models, \
     query_completions
 
 app = Flask(__name__)
-CORS(app)
 models = load_models()
 
 
