@@ -93,19 +93,19 @@ function submit() {
 }
 
 function handlePrefix(prefix) {
-    console.log(`passed ${prefix}`);
+    //console.log(`passed ${prefix}`);
     if (prefix.length > 7) {
-        console.log("too long");
+      //  console.log("too long");
         document.getElementById("textlimit").innerHTML =
             "Query Exceeds 7 Characters. Please resubmit.";
         d3.select("body").selectAll("table").remove();
         // delete an existing table
 
     } else {
-        console.log("not too long");
-        console.log("clicked button");
+        //console.log("not too long");
+        //console.log("clicked button");
         var xhr = new XMLHttpRequest();
-        xhr.open('get', `http://localhost:5000/test/${prefix}`, true);
+        xhr.open('get', `/query/${prefix}`, true);
         // xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
         xhr.send();
         xhr.onreadystatechange = function() {

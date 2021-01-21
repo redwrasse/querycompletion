@@ -1,5 +1,5 @@
 # server.py
-from flask import Flask
+from flask import Flask, render_template
 from flask_cors import CORS
 import json
 
@@ -12,12 +12,12 @@ models = load_models()
 
 
 @app.route('/')
-def hello_world():
-    return "Hello World"
+def index():
+    return render_template("index.html")
 
 
-@app.route('/test/<prefix>')
-def run_test(prefix):
+@app.route('/query/<prefix>')
+def query(prefix):
     query = prefix
     completions, lstm_probs = query_completions(models, query, 3)
     return make_data_obj(completions, lstm_probs)
