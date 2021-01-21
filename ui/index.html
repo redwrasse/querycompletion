@@ -68,15 +68,18 @@ background-color: white;
                 <p>This requires JavaScript, which is not supported by your browser or is disabled.</p>
             </noscript>
 
-            <p style="width: 500px;">Taken from <a href="../warandpeace.txt">an excerpt</a>
-                of War and Peace.
-                Inspired by <a href="https://sigir-ecom.github.io/ecom18Papers/paper24.pdf">this paper</a>.
+            <p style="width: 500px;">
+                Based on <a href="https://sigir-ecom.github.io/ecom18Papers/paper24.pdf">this paper</a>.
+                Trained on <a href="../warandpeace.txt">a War and Peace excerpt</a>.
+
                 <br><br>
                 Query completions are formed as a product of next-character completions, by the probability
                 chain rule. For example,
                 <br><br>
-                P(nge|ora) = P(e|orang) P(g|oran) P(n|ora)
+                <i>P(nge|ora) = P(e|orang) P(g|oran) P(n|ora)</i>
             </p>
+
+            Each next-character model is trained as an LSTM.
             <br/>
             <br/>
             <br/>
@@ -84,17 +87,19 @@ background-color: white;
 
     <input type="text" id="prefix" name="q">
             <br/>
+            <b id="textlimit"></b>
+
             <br/>
-    <button type="button">Get Completions</button>
-             <button type="button">I'm Feeling Lucky</button>
+            <br/>
+    <button type="button" onclick="submit()">Get Completions</button>
+             <button type="button" onclick="lucky()">I'm Feeling Lucky</button>
 
             <div id="results">
                 <br/>
                 <br/>
                 <br/>
                 <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
-<!--                 <script src="sample.js"></script>-->
-                 <script src="sample2.js"></script>
+                 <script src="tablegen.js"></script>
             </div>
 
         </article>

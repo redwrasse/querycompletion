@@ -80,11 +80,52 @@ jdata = [
     }
 ];
 
+function lucky() {
+    let luckyPrefixes = ["if i", "wher", "cat", "smel", "tuna", "whos"];
+    const randomElement = luckyPrefixes[Math.floor(Math.random() * luckyPrefixes.length)];
+    document.getElementById("prefix").value = randomElement;
+    handlePrefix(randomElement);
+}
 
-d3.select("body").selectAll("table")
-    .data([sample[0]["completions"]])
-    .enter().append("table")
-    .call(recurse);
+function submit() {
+    let prefix = document.getElementById("prefix").value;
+    handlePrefix(prefix);
+}
+
+function handlePrefix(prefix) {
+    console.log(`passed ${prefix}`);
+    if (prefix.length > 7) {
+        console.log("too long");
+        document.getElementById("textlimit").innerHTML =
+            "Query Exceeds 7 Characters. Please resubmit.";
+        d3.select("body").selectAll("table").remove();
+        // delete an existing table
+
+    } else {
+        console.log("not too long");
+        console.log("clicked button");
+        var xhr = new XMLHttpRequest();
+        xhr.open('get', `http://localhost:5000/test/${prefix}`, true);
+        // xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+        xhr.send();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4) {
+                var dataObj = JSON.parse(xhr.response);
+                d3.select("body").selectAll("table").remove();
+                d3.select("body").selectAll("table")
+                    .data([dataObj])
+                    .enter().append("table")
+                    .call(recurse);
+            }
+        }
+    }
+}
+
+
+// d3.select("body").selectAll("table")
+//     .data([sample[0]["completions"]])
+//     .enter().append("table")
+//     .call(recurse);
 
 function recurse(sel) {
     // sel is a d3.selection of one or more empty tables
@@ -93,7 +134,6 @@ function recurse(sel) {
         var colnames,
             tds,
             table = d3.select(this);
-
         // obtain column names by gathering unique key names in all 1st level objects
         // following method emulates a set by using the keys of a d3.map()
         colnames = d                                                          // array of objects
