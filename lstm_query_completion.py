@@ -1,13 +1,18 @@
 import numpy as np
 import random
 import tensorflow.keras as keras
-
+import tensorflow as tf
+from tensorflow.keras import backend as K
 from tensorflow.keras.layers import LSTM
 from tensorflow.keras.layers import Dense
 from tensorflow.keras.callbacks import ModelCheckpoint
+import logging
 
 
 WAR_AND_PEACE = './warandpeace.txt'
+
+
+logger = logging.getLogger("root")
 
 
 def prepare_war_and_peace():
@@ -26,19 +31,20 @@ def prepare_war_and_peace():
 class NextCharLSTM:
 
     def __init__(self, n):
-        self.text = prepare_war_and_peace()
         self.n = n
+        self.filepath = f"weights.bestn={self.n}.hdf5"
+        logging.info(f"initialized lstm {n}")
         self.model = self.get_model()
 
     def get_model(self):
-        filepath = f"weights.bestn={self.n}.hdf5"
         try:
-            model = keras.models.load_model(filepath)
+            model = keras.models.load_model(self.filepath)
             print(f'loaded LSTM model for n={self.n} from checkpoint')
 
-        except:
+        except Exception as e:
+            print(e)
             model = self.__build_model()
-            print('built new model')
+            print(f'built new model for n={self.n}')
         return model
 
     def __build_model(self):
@@ -51,9 +57,9 @@ class NextCharLSTM:
         model.compile(loss='categorical_crossentropy', optimizer=optimizer)
         return model
 
-    def sample_next_char_pred(self):
-        i = random.randint(0, len(self.text) - 1)
-        sentence = self.text[i]
+    def sample_next_char_pred(self, text):
+        i = random.randint(0, len(text) - 1)
+        sentence = text[i]
         if len(sentence) > self.n:
             j = random.randint(0, len(sentence) - self.n)
             query = sentence[j:j + self.n]
@@ -62,17 +68,10 @@ class NextCharLSTM:
             return nextchar
 
     def next_char_dist(self, query):
-        x_pred = np.zeros((1, self.n, 256))
-        for t, qc in enumerate(query):
-            if ord(qc) < 256:
-                x_pred[0, t, ord(qc)] = 1
-        model = self.model
-        dist = model.predict(x_pred, verbose=0)[0]
-        return dist
+        return get_next_char_dist(query, self.model, self.n)
 
-    def train(self, nepochs):
-        filepath = f"weights.bestn={self.n}.hdf5"
-        checkpoint = ModelCheckpoint(filepath=filepath,
+    def train(self, text, nepochs):
+        checkpoint = ModelCheckpoint(filepath=self.filepath,
                                      verbose=0, mode='max')
         callbacks_list = [checkpoint]
         batch_size = 128
@@ -81,8 +80,8 @@ class NextCharLSTM:
             x = np.zeros((max_length, self.n, 256), dtype=np.bool)
             y = np.zeros((max_length, 256), dtype=np.bool)
             k = 0
-            random.shuffle(self.text)
-            for i, sentence in enumerate(self.text):
+            random.shuffle(text)
+            for i, sentence in enumerate(text):
                 for j, c in enumerate(sentence[:-self.n]):
                     query = sentence[j:j + self.n]
                     nextchar = sentence[j + self.n]
@@ -100,6 +99,15 @@ class NextCharLSTM:
             loss = history.history['loss'][0]
             val_loss = history.history['val_loss'][0]
             print(f'epoch loss: {loss} epoch val loss: {val_loss}')
+
+
+def get_next_char_dist(query, model, n):
+    x_pred = np.zeros((1, n, 256))
+    for t, qc in enumerate(query):
+        if ord(qc) < 256:
+            x_pred[0, t, ord(qc)] = 1
+    dist = model.predict(x_pred, verbose=0)[0]
+    return dist
 
 
 def query_completions(models, query, completion_length, prob_cutoff=1e-2):
@@ -132,21 +140,22 @@ def query_completions(models, query, completion_length, prob_cutoff=1e-2):
     return completion_probs, lstm_probs
 
 
-def load_models():
+def load_nextcharlstm_objs():
     import os
     print("loading models ...")
-    models = []
+    nextcharlstm_objs = []
     fnames = os.listdir('./')
     for fname in fnames:
         if fname.endswith('.hdf5'):
             n = int(fname.split('.hdf5')[0].split("=")[-1])
-            models.append(NextCharLSTM(n))
+            nextcharlstm_objs.append(NextCharLSTM(n))
     print("-"*50)
-    return models
+    return nextcharlstm_objs
 
 
 def train_n(n):
+    text = prepare_war_and_peace()
     lstm = NextCharLSTM(n)
-    lstm.train(nepochs=100)
+    lstm.train(text, nepochs=100)
 
 
