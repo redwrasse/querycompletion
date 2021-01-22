@@ -1,11 +1,11 @@
 # cmd_line.py
-from lstm_query_completion import load_models, \
+from lstm_query_completion import load_nextcharlstm_objs, \
     query_completions
 
 
 def main():
     import sys
-    models = load_models()
+    models = load_nextcharlstm_objs()
     while True:
         query = input('Please enter a query (q to quit):\n')
         if query == 'q':

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Query Completions</title>
+    <style type="text/css">@import url("../static/style.css");</style>
+<!--<style type="text/css">-->
+    <!--html *-->
+<!--{-->
+   <!--/*font-size: 1em !important;*/-->
+   <!--color: #000 !important;-->
+   <!--font-family: monospace, sans-serif !important;-->
+<!--}-->
+    <!--table {-->
+        <!--/*font-family: "Helvetica", "Lucida Sans", "Lucida Sans Unicode", "Luxi Sans", Tahoma, sans-serif;*/-->
+        <!--box-shadow: 1px 1px 5px rgba(0,0,0,0.5);-->
+        <!--border-collapse: collapse;-->
+        <!--border-spacing: 0;-->
+    <!--}-->
+    <!--table {-->
+        <!--/*margin: auto;*/-->
+    <!--}-->
+    <!--table, td, th {-->
+        <!--padding: 7px;-->
+        <!--/*text-align: center;*/-->
+        <!--border: 1px solid rgb(42, 107, 83);-->
+    <!--}-->
+    <!--th {-->
+        <!--background-color: rgb(99, 156, 140);-->
+        <!--color: white;-->
+    <!--}-->
+    <!--#likelihoods tr {-->
+        <!--cursor: pointer;-->
+    <!--}-->
+    <!--#likelihoods div.bar {-->
+        <!--height: 1em;-->
+        <!--background: #80C0FF;-->
+    <!--}-->
+    <!--#likelihoods tr.active {-->
+        <!--font-weight: bold;-->
+    <!--}-->
+    <!--#likelihoods tr.active div.bar {-->
+        <!--background: #60A0FF;-->
+    <!--}-->
+     <!--button {-->
+      <!--transition-duration: 0.4s;-->
+<!--background-color: white;-->
+  <!--color: black;-->
+  <!--border: 2px solid #4CAF50; /* Green */-->
+      <!--}-->
+    <!--button:hover {-->
+         <!--background-color: #4CAF50; /* Green */-->
+  <!--color: white;-->
+
+    <!--}-->
+
+<!--</style>-->
+    <script type="text/javascript" src="../static/tablegen.js"></script>
+    <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+</head>
+<body>
+
+<div class="vert-main">
+
+    <div class="horz-ma  ">
+
+        <article>
+            <h2>Query Completions</h2>
+            <noscript>
+                <p>This requires JavaScript, which is not supported by your browser or is disabled.</p>
+            </noscript>
+
+            <p style="width: 500px;">
+                Based on <a href="https://sigir-ecom.github.io/ecom18Papers/paper24.pdf">this paper</a>.
+                Trained on <a href="../warandpeace.txt">a War and Peace excerpt</a>.
+
+                <br><br>
+                Query completions are formed as a product of next-character completions, by the probability
+                chain rule. For example,
+                <br><br>
+                <i>P(nge|ora) = P(e|orang) P(g|oran) P(n|ora)</i>
+            </p>
+
+            Each next-character model is trained as an LSTM.
+            <br/>
+            <br/>
+            <br/>
+            <label for="prefix">Enter prefix (7 characters or less):</label>
+
+    <input type="text" id="prefix" name="q">
+            <br/>
+            <b id="textlimit"></b>
+
+            <br/>
+            <br/>
+    <button type="button" onclick="submit()">Get Completions</button>
+             <button type="button" onclick="lucky()">I'm Feeling Lucky</button>
+
+            <div id="results">
+                <br/>
+                <br/>
+                <br/>
+
+
+            </div>
+
+        </article>
+
+    </div>
+
+</div>
+</body>
+</html>

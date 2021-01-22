@@ -1,21 +1,29 @@
 query completion
 ---
-![query completion](./resources/cmdline.png)
 
 Query completion as a product of next-character models. For example, completing ‘ora’ with ‘nge’ to make ‘orange’
 
-P(nge|ora) = P(e|orang) P(g|oran) P(n|ora)
+**P(nge|ora) = P(e|orang) P(g|oran) P(n|ora)**
 
 A contiguous sequence of trained n= models is needed; weights for some pre-trained models for n = ... are included.
 
 
 ### Run
 
-start command line prompt
+Start with ui
+
+
+``` 
+python3 main.py
+```
+![query completion](./resources/qcui.png)
+
+Or run from command line
 
 ``` 
 python3 cmd_line.py
 ```
+![query completion](./resources/cmdline.png)
 ----
 
 
