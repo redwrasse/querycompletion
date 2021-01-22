@@ -1,6 +1,5 @@
 query completion
 ---
-![query completion](./resources/qcui.png)
 
 Query completion as a product of next-character models. For example, completing ‘ora’ with ‘nge’ to make ‘orange’
 
@@ -11,19 +10,20 @@ A contiguous sequence of trained n= models is needed; weights for some pre-train
 
 ### Run
 
-Start w/UI
+Start with ui
 
 
 ``` 
 python3 main.py
 ```
+![query completion](./resources/qcui.png)
 
-Or run through command line prompt
+Or run from command line
 
 ``` 
 python3 cmd_line.py
 ```
-
+![query completion](./resources/cmdline.png)
 ----
 
 
