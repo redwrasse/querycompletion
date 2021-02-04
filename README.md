@@ -1,5 +1,11 @@
 query completion
 ---
+[Launch here](https://querycompletion.onrender.com/).
+
+Accompanying [notes](https://www.redwrasse.io/notes/querycompletion).
+
+
+
 
 Query completion as a product of next-character models. For example, completing ‘ora’ with ‘nge’ to make ‘orange’
 
